@@ -133,6 +133,7 @@ y_hat = model.predict(X_tst)
 print("Perceptron Accuracy:", accuracy(y_tst, y_hat))
 plot_confusion_matrix(y_tst, y_hat)
 
+#Plot
 plt.plot(model.trn_acc, label="Train Accuracy")
 plt.plot(model.vld_acc, label="Validation Accuracy")
 plt.xlabel("Epoch")
@@ -141,6 +142,7 @@ plt.title("Perceptron Accuracy per Epoch")
 plt.legend()
 plt.show()
 
+#Print results
 print(f"TPR: {tpr(y_tst, y_hat)}")
 print(f"TNR: {tnr(y_tst, y_hat)}")
 print(f"PPV: {ppv(y_tst, y_hat)}")

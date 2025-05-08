@@ -144,7 +144,7 @@ def main():
     time_interval = "5"
     start = "2024-01-01"
     end = "2024-05-01"
-    token = "Token HIDDEN. Will provide if needed to download data" #Token is PAID, valid till beginning of June
+    token = "Insert token HERE" #Token is PAID, valid till beginning of June
 
     data = download_data(symbols,time_interval, start, end, token)
 
