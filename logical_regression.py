@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from typing import List
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 def get_preprocessed_data(path: str):
     market_df = pd.read_csv(path)
@@ -84,9 +87,29 @@ class LogisticRegression():
     
 X_trn, X_tst, y_trn, y_tst = get_preprocessed_data("./data/ict_dataset.csv")
 
-model = LogisticRegression(alpha=0.1, batch_size=64, epochs=100, seed=42)
+model = LogisticRegression(alpha=.01, batch_size=32, epochs=150, seed=42)
 model.fit(X_trn, y_trn, X_tst, y_tst)
 
 y_hat = model.predict(X_tst)
 accuracy = (y_hat == y_tst).mean()
 print("Test Accuracy:", accuracy)
+
+plt.figure(figsize=(8, 4))
+plt.plot(model.trn_loss, label="Trn loss", color='blue')
+plt.plot(model.vld_loss, label="Validation loss", color='orange')
+plt.xlabel("Epoch")
+plt.ylabel("Average NLL Loss")
+plt.title("Learning Curve")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+y_tst = y_tst.flatten()
+y_hat = y_hat.flatten()
+
+cfm = confusion_matrix(y_tst, y_hat)
+sns.heatmap(cfm, annot=True, fmt="d", cmap="Blues", xticklabels=[0, 1], yticklabels=[0, 1])
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.show()

@@ -126,7 +126,7 @@ class Perceptron():
     
 X_trn, X_tst, y_trn, y_tst = get_preprocessed_data("./data/ict_dataset.csv")
 
-model = Perceptron(alpha=0.001, epochs=100, seed=42)
+model = Perceptron(alpha=0.001, epochs=50, seed=42)
 model.fit(X_trn, y_trn, X_tst, y_tst)
 
 y_hat = model.predict(X_tst)
