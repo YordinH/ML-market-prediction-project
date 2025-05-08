@@ -46,6 +46,21 @@ def get_batches(data_len: int, batch_size: int = 32,) -> List[np.ndarray]:
 
     return batches
 
+def ppv(y: np.ndarray, y_hat: np.ndarray) -> float:
+    y =  y.flatten() 
+    y_hat = y_hat.flatten() 
+    
+    tn, fp, fn, tp = confusion_matrix(y_true=y, y_pred=y_hat).ravel()
+    return tp / (tp+fp)
+
+def tpr(y: np.ndarray, y_hat: np.ndarray) -> float:
+    tn, fp, fn, tp = confusion_matrix(y_true=y, y_pred=y_hat).ravel()
+    return tp / (tp + fn)
+
+def tnr(y: np.ndarray, y_hat: np.ndarray) -> float:
+    tn, fp, fn, tp = confusion_matrix(y_true=y, y_pred=y_hat).ravel()
+    return tn / (tn + fp)
+
 class LogisticRegression():
     def __init__(self, alpha: float, batch_size: int, epochs: int = 1, seed: int = 0):
         self.alpha = alpha
@@ -87,7 +102,7 @@ class LogisticRegression():
     
 X_trn, X_tst, y_trn, y_tst = get_preprocessed_data("./data/ict_dataset.csv")
 
-model = LogisticRegression(alpha=.01, batch_size=32, epochs=150, seed=42)
+model = LogisticRegression(alpha=.001, batch_size=256, epochs=150, seed=42)
 model.fit(X_trn, y_trn, X_tst, y_tst)
 
 y_hat = model.predict(X_tst)
@@ -112,4 +127,8 @@ sns.heatmap(cfm, annot=True, fmt="d", cmap="Blues", xticklabels=[0, 1], yticklab
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix")
-plt.show()
+plt.show()  
+
+print(f"TPR: {tpr(y_tst, y_hat)}")
+print(f"TNR: {tnr(y_tst, y_hat)}")
+print(f"PPV: {ppv(y_tst, y_hat)}")
